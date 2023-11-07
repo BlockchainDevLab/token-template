@@ -270,7 +270,6 @@ describe("TokenTemplate", function () {
 
     })
 
-
     describe("Burn", function () {
 
         it('Should burn token : burn ', async function () {
