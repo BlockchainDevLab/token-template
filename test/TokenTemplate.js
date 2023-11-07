@@ -277,18 +277,18 @@ describe("TokenTemplate", function () {
 
             const { TokenTemplate, token, owner, addr1, addr2, nm, sb, cap } = await loadFixture(deployTokenTemplate)
 
-            const initialAmount = 100        
+            const initialAmount = 100
             const initialAmountDecimal = ethers.parseUnits(initialAmount.toString(), 18)
             await token.mint(addr1.address, initialAmountDecimal)
-            const signerContract = await token.connect(addr1)    
-            await signerContract.burn(initialAmountDecimal)   
+            const signerContract = await token.connect(addr1)
+            await signerContract.burn(initialAmountDecimal)
             const sp = await token.totalSupply()
             //console.log(sp)
             const bl = await token.balanceOf(addr1.address)
             //console.log(bl)
             expect(sp).to.equal(bl)
-            expect(bl).to.equal(0)        
-        })  
+            expect(bl).to.equal(0)
+        })
 
 
         it('Should burn token : burnFrom', async function () {
@@ -296,51 +296,48 @@ describe("TokenTemplate", function () {
             const { TokenTemplate, token, owner, addr1, addr2, nm, sb, cap } = await loadFixture(deployTokenTemplate)
 
             const initialAmount = 100;
-           
+
 
             const initialAmountDecimal = ethers.parseUnits(initialAmount.toString(), 18)
             await token.mint(addr1.address, initialAmountDecimal)
 
-        
+
             const signerContract = await token.connect(addr1)
-
             await signerContract.approve(owner.address, initialAmountDecimal)
-
             const signerContractOwner = await token.connect(owner)
             const previousAllowance = await token.allowance(addr1.address, owner.address)
-            await expect(signerContractOwner.transferFrom(addr1.address, addr2.address, incrementAmountDecimal)).to.be.revertedWithCustomError(token,
-                'ERC20InsufficientAllowance')
-            
-        }) 
+            await signerContractOwner.burnFrom(addr1.address, previousAllowance)
 
+            const sp = await token.totalSupply()
+            //console.log(sp)
+            const bl = await token.balanceOf(addr1.address)
+            //console.log(bl)
+            expect(sp).to.equal(bl)
+            expect(bl).to.equal(0)
 
+        })
 
-        it('Should not burn token ERC20InsufficientXXXXXX', async function () {
+        it('Should not burn token ERC20InsufficientBalance', async function () {
 
             const { TokenTemplate, token, owner, addr1, addr2, nm, sb, cap } = await loadFixture(deployTokenTemplate)
 
-            const initialAmount = 100;
-           
-
+            const initialAmount = 100
             const initialAmountDecimal = ethers.parseUnits(initialAmount.toString(), 18)
             await token.mint(addr1.address, initialAmountDecimal)
 
-        
-            /*
             const signerContract = await token.connect(addr1)
+            const burnAmountDecimal = ethers.parseUnits('1000', 18)
 
-            await signerContract.approve(owner.address, initialAmountDecimal)
+            await expect(signerContract.burn(burnAmountDecimal)).to.be.revertedWithCustomError(signerContract,
+                'ERC20InsufficientBalance')
+            const sp = await token.totalSupply()
+            //console.log(sp)
+            const bl = await token.balanceOf(addr1.address)
+            //console.log(bl)
+            expect(sp).to.equal(bl)
+            expect(bl).to.equal(initialAmountDecimal)
+        })
 
-            const signerContractOwner = await token.connect(owner)
-            const previousAllowance = await token.allowance(addr1.address, owner.address)
-            await expect(signerContractOwner.transferFrom(addr1.address, addr2.address, incrementAmountDecimal)).to.be.revertedWithCustomError(token,
-                'ERC20InsufficientAllowance')*/
-            
-        }) 
-
-    
     })
-
-
 
 })
