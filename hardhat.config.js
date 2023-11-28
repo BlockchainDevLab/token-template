@@ -17,7 +17,7 @@ module.exports = {
       url: process.env.TESTE_URL,
       accounts: [`0x${WALLET_PRIVATE_KEY}`],
     },
-    
+
   }, etherscan: {
     apiKey: POLYGONSCAN_API_KEY,
   },

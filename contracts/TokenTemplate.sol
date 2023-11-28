@@ -13,7 +13,10 @@ contract TokenTemplate is
     ERC20BurnableUpgradeable,
     OwnableUpgradeable
 {
-    constructor() {}
+    /// @custom:oz-upgrades-unsafe-allow constructor
+    constructor() {
+        _disableInitializers();
+    }
 
     function initialize(
         string memory nm,
